@@ -16,9 +16,6 @@ export class StateActionNotFoundError extends Error {
   }
 }
 
-const stateActionNotFoundErrorFactory = (actionName: string) =>
-  new StateActionNotFoundError(actionName);
-
 @Injectable({
   providedIn: 'root',
 })
@@ -45,7 +42,7 @@ export class StateActionDispatcherService {
 
     return defer(() => {
       if (!this.handlers[action]) {
-        return throwError(() => stateActionNotFoundErrorFactory(action));
+        return throwError(() => new StateActionNotFoundError(action));
       }
 
       const result = this.handlers[action](value, accessToken);

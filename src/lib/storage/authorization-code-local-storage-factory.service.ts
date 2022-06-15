@@ -32,9 +32,6 @@ export type StateDataContainer = {
   data: StateData;
 };
 
-const stateNotFoundErrorFactory = () => new StateNotFoundError();
-const stateExpiredErrorFactory = () => new StateExpiredError();
-
 export class AuthorizationCodeLocalStorage implements AuthorizationCodeStorage {
   private readonly stateKey = (stateId: string): string =>
     `${this.name}-${stateDataKeyName}-${stateId}`;
@@ -96,11 +93,11 @@ export class AuthorizationCodeLocalStorage implements AuthorizationCodeStorage {
       );
 
       if (storedStateDataContainer === null) {
-        return throwError(stateNotFoundErrorFactory);
+        return throwError(() => new StateNotFoundError());
       }
 
       if (storedStateDataContainer.expires_at < currentTime) {
-        return throwError(stateExpiredErrorFactory);
+        return throwError(() => new StateExpiredError());
       }
 
       return of(storedStateDataContainer.data);

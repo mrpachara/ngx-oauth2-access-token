@@ -11,8 +11,6 @@ export class BadRequestCallbackError extends Error {
   }
 }
 
-const badRequestCallbackErrorFactory = () => new BadRequestCallbackError();
-
 export function oauth2Callback(
   route: ActivatedRoute,
   authorizationCodeDispatcher: AuthorizationCodeDispatcherService,
@@ -24,7 +22,12 @@ export function oauth2Callback(
     const stateId = queryParamMap.get('state');
 
     if (stateId === null) {
-      return throwError(badRequestCallbackErrorFactory);
+      return throwError(
+        () =>
+          new BadRequestCallbackError(
+            `The 'state' is required for callback. The oauth2 server must reply with 'state' query string.`,
+          ),
+      );
     }
 
     return of(stateId);
@@ -50,10 +53,12 @@ export function oauth2Callback(
         return throwError(() => errorObject);
       }
 
-      const code = queryParamMap.get('code');
+      const code = queryParamMap.get(
+        `The 'code' is required for callback. No 'code' was replied from oauth server in query string.`,
+      );
 
       if (code === null) {
-        return throwError(badRequestCallbackErrorFactory);
+        return throwError(() => new BadRequestCallbackError(''));
       }
 
       return authorizationCodeDispatcher

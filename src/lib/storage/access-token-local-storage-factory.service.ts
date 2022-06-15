@@ -1,14 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  defer,
-  filter,
-  map,
-  Observable,
-  of,
-  switchMap,
-  tap,
-  throwError,
-} from 'rxjs';
+import { defer, Observable, of, switchMap, tap, throwError } from 'rxjs';
 import {
   AccessTokenStorage,
   StoredAccessToken,
@@ -40,10 +31,6 @@ export class RefreshTokenNotFoundError extends Error {
   }
 }
 
-const accessTokenNotFoundErrorFactory = () => new AccessTokenNotFoundError();
-const accessTokenExpiredErrorFactory = () => new AccessTokenExpiredError();
-const refreshTokenNotFoundErrorFactory = () => new RefreshTokenNotFoundError();
-
 const tokenDataKeyName = `oauth-token-data`;
 
 class AccessTokenLocalStorage implements AccessTokenStorage {
@@ -70,11 +57,11 @@ class AccessTokenLocalStorage implements AccessTokenStorage {
       ).pipe(
         switchMap((storedAccessToken) => {
           if (storedAccessToken === null) {
-            return throwError(accessTokenNotFoundErrorFactory);
+            return throwError(() => new AccessTokenNotFoundError());
           }
 
           if (storedAccessToken.expires_at < Date.now()) {
-            return throwError(accessTokenExpiredErrorFactory);
+            return throwError(() => new AccessTokenExpiredError());
           }
 
           return of(storedAccessToken);
@@ -111,7 +98,7 @@ class AccessTokenLocalStorage implements AccessTokenStorage {
       ).pipe(
         switchMap((storedRefreshToken) => {
           if (storedRefreshToken === null) {
-            return throwError(refreshTokenNotFoundErrorFactory);
+            return throwError(() => new RefreshTokenNotFoundError());
           }
 
           return of(storedRefreshToken);
