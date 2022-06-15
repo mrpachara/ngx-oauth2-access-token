@@ -53,12 +53,15 @@ export function oauth2Callback(
         return throwError(() => errorObject);
       }
 
-      const code = queryParamMap.get(
-        `The 'code' is required for callback. No 'code' was replied from oauth server in query string.`,
-      );
+      const code = queryParamMap.get('code');
 
       if (code === null) {
-        return throwError(() => new BadRequestCallbackError(''));
+        return throwError(
+          () =>
+            new BadRequestCallbackError(
+              `The 'code' is required for callback. No 'code' was replied from oauth server in query string.`,
+            ),
+        );
       }
 
       return authorizationCodeDispatcher
