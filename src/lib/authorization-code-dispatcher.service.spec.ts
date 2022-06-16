@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { AuthorizationCodeDispatcherService } from './authorization-code-dispatcher.service';
 
-describe('AuthorizationCodeDispatcherService', () => {
+xdescribe('AuthorizationCodeDispatcherService', () => {
   let service: AuthorizationCodeDispatcherService;
 
   beforeEach(() => {

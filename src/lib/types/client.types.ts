@@ -1,3 +1,5 @@
+import { HttpContextToken } from '@angular/common/http';
+
 export type GrantParams = {
   grant_type: string;
   state?: string;
@@ -42,3 +44,5 @@ export type AuthorizationCodeParams = {
   redirect_uri: string;
   state?: string;
 };
+
+export const SKIP_ASSIGNING_ACCESS_TOKEN = new HttpContextToken(() => false);

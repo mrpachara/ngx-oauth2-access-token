@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { AccessTokenLocalStorageFactoryService } from './access-token-local-storage-factory.service';
 
-describe('AccessTokenLocalStorageFactoryService', () => {
+xdescribe('AccessTokenLocalStorageFactoryService', () => {
   let service: AccessTokenLocalStorageFactoryService;
 
   beforeEach(() => {

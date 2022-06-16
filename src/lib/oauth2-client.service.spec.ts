@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { Oauth2ClientService } from './oauth2-client.service';
 
-describe('Oauth2ClientService', () => {
+xdescribe('Oauth2ClientService', () => {
   let service: Oauth2ClientService;
 
   beforeEach(() => {

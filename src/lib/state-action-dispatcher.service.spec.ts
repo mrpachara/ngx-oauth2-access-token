@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { StateActionDispatcherService } from './state-action-dispatcher.service';
 
-describe('OauthStateActionDispatcherService', () => {
+xdescribe('OauthStateActionDispatcherService', () => {
   let service: StateActionDispatcherService;
 
   beforeEach(() => {

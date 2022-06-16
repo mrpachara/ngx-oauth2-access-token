@@ -1,4 +1,8 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpContext,
+  HttpErrorResponse,
+} from '@angular/common/http';
 import {
   FactoryProvider,
   Inject,
@@ -12,6 +16,7 @@ import {
   AuthorizationCodeParams,
   Oauth2ClientConfig,
   OAUTH2_CLIENT_CONFIG,
+  SKIP_ASSIGNING_ACCESS_TOKEN,
   StandardGrantsParams,
 } from './types';
 
@@ -73,6 +78,7 @@ export class Oauth2ClientService {
             : {}),
         },
         {
+          context: new HttpContext().set(SKIP_ASSIGNING_ACCESS_TOKEN, true),
           headers: {
             ...(!this.config.clientCredentialsInParams
               ? this.generateClientHeader()

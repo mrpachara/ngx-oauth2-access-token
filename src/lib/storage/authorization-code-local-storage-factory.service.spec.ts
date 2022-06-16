@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { AuthorizationCodeLocalStorageService } from './authorization-code-local-storage-factory.service';
+import { AuthorizationCodeLocalStorageFactoryService } from './authorization-code-local-storage-factory.service';
 
-describe('AuthorizationCodeLocalStorageService', () => {
-  let service: AuthorizationCodeLocalStorageService;
+xdescribe('AuthorizationCodeLocalStorageFactoryService', () => {
+  let service: AuthorizationCodeLocalStorageFactoryService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(AuthorizationCodeLocalStorageService);
+    service = TestBed.inject(AuthorizationCodeLocalStorageFactoryService);
   });
 
   it('should be created', () => {
