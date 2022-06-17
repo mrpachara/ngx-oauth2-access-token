@@ -1,5 +1,6 @@
-import { InjectionToken } from '@angular/core';
 import { Observable } from 'rxjs';
+
+import { CreatableFactory } from './lib.types';
 import { AccessToken } from './standard.types';
 import { StateAction } from './state-action.types';
 
@@ -35,18 +36,8 @@ export interface AuthorizationCodeStorage {
   removeStateData(stateId: string): Observable<true>;
 }
 
-export interface AccessTokenStorageFactory {
-  create(name: string): AccessTokenStorage;
-}
+export interface AccessTokenStorageFactory
+  extends CreatableFactory<AccessTokenStorage> {}
 
-export interface AuthorizationCodeStorageFactory {
-  create(name: string): AuthorizationCodeStorage;
-}
-
-export const ACCESS_TOKEN_STORAGE_FACTORY =
-  new InjectionToken<AccessTokenStorageFactory>('access-token-storage-factory');
-
-export const AUTHORIZATION_CODE_STORAGE_FACTORY =
-  new InjectionToken<AuthorizationCodeStorageFactory>(
-    'authorization-code-storage-factory',
-  );
+export interface AuthorizationCodeStorageFactory
+  extends CreatableFactory<AuthorizationCodeStorage> {}

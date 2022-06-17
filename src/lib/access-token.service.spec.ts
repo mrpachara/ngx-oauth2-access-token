@@ -4,14 +4,10 @@ import {
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
-import { AccessTokenDispatcherService } from './access-token-dispatcher.service';
+import { AccessTokenService } from './access-token.service';
 import { NGX_OAUTH2_ACCESS_TOKEN_PROVIDERS } from './providers';
-import {
-  AccessTokenDispatcherConfig,
-  ACCESS_TOKEN_DISPATCHER_CONFIG,
-  Oauth2ClientConfig,
-  OAUTH2_CLIENT_CONFIG,
-} from './types';
+import { ACCESS_TOKEN_SERVICE_CONFIG, OAUTH2_CLIENT_CONFIG } from './tokens';
+import { AccessTokenServiceConfig, Oauth2ClientConfig } from './types';
 
 const oauth2ClientConfig: Oauth2ClientConfig = {
   clientId: 'web-app',
@@ -21,13 +17,13 @@ const oauth2ClientConfig: Oauth2ClientConfig = {
   clientCredentialsInParams: false,
 };
 
-const accessTokenDispatcherConfig: AccessTokenDispatcherConfig = {
+const accessTokenConfig: AccessTokenServiceConfig = {
   name: 'oauth2',
   debug: false,
 };
 
-describe('AccessTokenDispatcherService', () => {
-  let service: AccessTokenDispatcherService;
+describe('AccessTokenService', () => {
+  let service: AccessTokenService;
   let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
@@ -37,12 +33,12 @@ describe('AccessTokenDispatcherService', () => {
         ...NGX_OAUTH2_ACCESS_TOKEN_PROVIDERS,
         { provide: OAUTH2_CLIENT_CONFIG, useValue: oauth2ClientConfig },
         {
-          provide: ACCESS_TOKEN_DISPATCHER_CONFIG,
-          useValue: accessTokenDispatcherConfig,
+          provide: ACCESS_TOKEN_SERVICE_CONFIG,
+          useValue: accessTokenConfig,
         },
       ],
     });
-    service = TestBed.inject(AccessTokenDispatcherService);
+    service = TestBed.inject(AccessTokenService);
   });
 
   it('should be created', () => {

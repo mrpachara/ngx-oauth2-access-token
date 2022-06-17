@@ -1,27 +1,13 @@
 import { Injectable } from '@angular/core';
 import { defer, Observable, of, throwError } from 'rxjs';
+
+import { StateExpiredError, StateNotFoundError } from '../errors';
 import {
   AuthorizationCodeStorage,
   AuthorizationCodeStorageFactory,
   StateData,
 } from '../types';
-import { LocalStorageService } from './local-storage.service';
-
-export class StateNotFoundError extends Error {
-  constructor(message: string = 'State not found.') {
-    super(message);
-
-    this.name = this.constructor.name;
-  }
-}
-
-export class StateExpiredError extends Error {
-  constructor(message: string = 'State has expired.') {
-    super(message);
-
-    this.name = this.constructor.name;
-  }
-}
+import { LocalStorage } from './local.storage';
 
 const stateDataKeyName = `oauth-code-state`;
 const stateTTL = 10 * 60 * 1000;
@@ -53,7 +39,7 @@ export class AuthorizationCodeLocalStorage implements AuthorizationCodeStorage {
 
   constructor(
     private readonly name: string,
-    private readonly storage: LocalStorageService,
+    private readonly storage: LocalStorage,
   ) {
     this.clearStateDataContainers();
   }
@@ -127,10 +113,10 @@ export class AuthorizationCodeLocalStorage implements AuthorizationCodeStorage {
 @Injectable({
   providedIn: 'root',
 })
-export class AuthorizationCodeLocalStorageFactoryService
+export class AuthorizationCodeLocalStorageFactory
   implements AuthorizationCodeStorageFactory
 {
-  constructor(private readonly storage: LocalStorageService) {}
+  constructor(private readonly storage: LocalStorage) {}
 
   create(name: string): AuthorizationCodeStorage {
     return new AuthorizationCodeLocalStorage(name, this.storage);

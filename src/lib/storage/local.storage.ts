@@ -4,7 +4,7 @@ import { filter, map, Observable, pipe, Subject } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class LocalStorageService {
+export class LocalStorage {
   private readonly transToStorage = <T = any>(value: T | null): string => {
     return JSON.stringify(value);
   };

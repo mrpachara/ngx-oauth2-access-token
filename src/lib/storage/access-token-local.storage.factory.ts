@@ -1,35 +1,17 @@
 import { Injectable } from '@angular/core';
-import { defer, Observable, of, switchMap, tap, throwError } from 'rxjs';
+import { defer, Observable, of, switchMap, throwError } from 'rxjs';
+
+import {
+  AccessTokenExpiredError,
+  AccessTokenNotFoundError,
+  RefreshTokenNotFoundError,
+} from '../errors';
 import {
   AccessTokenStorage,
-  StoredAccessToken,
   AccessTokenStorageFactory,
+  StoredAccessToken,
 } from '../types';
-import { LocalStorageService } from './local-storage.service';
-
-export class AccessTokenNotFoundError extends Error {
-  constructor(message: string = 'Access token is not found.') {
-    super(message);
-
-    this.name = this.constructor.name;
-  }
-}
-
-export class AccessTokenExpiredError extends Error {
-  constructor(message: string = 'Access token has expired.') {
-    super(message);
-
-    this.name = this.constructor.name;
-  }
-}
-
-export class RefreshTokenNotFoundError extends Error {
-  constructor(message: string = 'Refresh token is not found.') {
-    super(message);
-
-    this.name = this.constructor.name;
-  }
-}
+import { LocalStorage } from './local.storage';
 
 const tokenDataKeyName = `oauth-token-data`;
 
@@ -41,7 +23,7 @@ class AccessTokenLocalStorage implements AccessTokenStorage {
 
   constructor(
     private readonly name: string,
-    private readonly storage: LocalStorageService,
+    private readonly storage: LocalStorage,
   ) {
     this.accessToken$ = this.storage.watchItem<StoredAccessToken>(
       this.stoageKey('access-token'),
@@ -132,10 +114,10 @@ class AccessTokenLocalStorage implements AccessTokenStorage {
 @Injectable({
   providedIn: 'root',
 })
-export class AccessTokenLocalStorageFactoryService
+export class AccessTokenLocalStorageFactory
   implements AccessTokenStorageFactory
 {
-  constructor(private readonly storage: LocalStorageService) {}
+  constructor(private readonly storage: LocalStorage) {}
 
   create(name: string): AccessTokenStorage {
     return new AccessTokenLocalStorage(name, this.storage);

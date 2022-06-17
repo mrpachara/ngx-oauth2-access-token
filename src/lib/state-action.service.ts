@@ -1,25 +1,14 @@
 import { Inject, Injectable } from '@angular/core';
 import { defer, from, Observable, of, throwError } from 'rxjs';
-import {
-  AccessToken,
-  StateAction,
-  StateActionHandlers,
-  STATE_ACTION_HANDLERS,
-} from './types';
 
-export class StateActionNotFoundError extends Error {
-  constructor(
-    actionName: string,
-    message: string = 'State action %s is not found in STATE_ACTION_HANDLERS.',
-  ) {
-    super(message.replace(/\%s/, actionName));
-  }
-}
+import { StateActionNotFoundError } from './errors';
+import { STATE_ACTION_HANDLERS } from './tokens';
+import { AccessToken, StateAction, StateActionHandlers } from './types';
 
 @Injectable({
   providedIn: 'root',
 })
-export class StateActionDispatcherService {
+export class StateActionService {
   private readonly extract = (actionValue: string) => actionValue.split(':', 2);
 
   private readonly handlers: StateActionHandlers;

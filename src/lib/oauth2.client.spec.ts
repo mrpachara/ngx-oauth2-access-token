@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { LocalStorageService } from './local-storage.service';
+import { Oauth2Client } from './oauth2.client';
 
-xdescribe('LocalStorageService', () => {
-  let service: LocalStorageService;
+xdescribe('Oauth2Client', () => {
+  let service: Oauth2Client;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(LocalStorageService);
+    service = TestBed.inject(Oauth2Client);
   });
 
   it('should be created', () => {

@@ -5,6 +5,7 @@ import {
   InjectionToken,
 } from '@angular/core';
 import { map, Observable, switchMap, throwError } from 'rxjs';
+
 import {
   base64UrlEncode,
   InvalidScopeError,
@@ -12,16 +13,18 @@ import {
   sha256,
   validateAndTransformScopes,
 } from './functions';
-import { Oauth2ClientService } from './oauth2-client.service';
+import { Oauth2Client } from './oauth2.client';
+import {
+  AUTHORIZATION_CODE_SERVICE_CONFIG,
+  AUTHORIZATION_CODE_STORAGE_FACTORY,
+} from './tokens';
 import {
   AccessToken,
-  AuthorizationCodeDispatcherConfig,
+  AuthorizationCodeServiceConfig,
   AuthorizationCodeGrantParams,
   AuthorizationCodeParams,
   AuthorizationCodeStorage,
   AuthorizationCodeStorageFactory,
-  AUTHORIZATION_CODE_DISPATCHER_CONFIG,
-  AUTHORIZATION_CODE_STORAGE_FACTORY,
   ScopesType,
   StateData,
 } from './types';
@@ -29,21 +32,21 @@ import {
 const codeVerifierLength = 56;
 const stateIdLength = 32;
 
-export function createAuthorizationCodeDispatcherProvider(
+export function createAuthorizationCodeServiceProvider(
   providedToken:
-    | InjectionToken<AuthorizationCodeDispatcherService>
-    | typeof AuthorizationCodeDispatcherService,
-  config: AuthorizationCodeDispatcherConfig,
-  clientToken: InjectionToken<Oauth2ClientService> | typeof Oauth2ClientService,
+    | InjectionToken<AuthorizationCodeService>
+    | typeof AuthorizationCodeService,
+  config: AuthorizationCodeServiceConfig,
+  clientToken: InjectionToken<Oauth2Client> | typeof Oauth2Client,
   storageFactoryToken?: InjectionToken<AuthorizationCodeStorageFactory>,
 ): FactoryProvider {
   return {
     provide: providedToken,
     useFactory: (
-      client: Oauth2ClientService,
+      client: Oauth2Client,
       storageFactory: AuthorizationCodeStorageFactory,
-    ): AuthorizationCodeDispatcherService =>
-      new AuthorizationCodeDispatcherService(config, client, storageFactory),
+    ): AuthorizationCodeService =>
+      new AuthorizationCodeService(config, client, storageFactory),
     deps: [
       clientToken,
       storageFactoryToken
@@ -56,7 +59,7 @@ export function createAuthorizationCodeDispatcherProvider(
 @Injectable({
   providedIn: 'root',
 })
-export class AuthorizationCodeDispatcherService {
+export class AuthorizationCodeService {
   private readonly loadStateData = (stateId: string) =>
     this.storage.loadStateData(stateId);
 
@@ -98,9 +101,9 @@ export class AuthorizationCodeDispatcherService {
   private readonly storage: AuthorizationCodeStorage;
 
   constructor(
-    @Inject(AUTHORIZATION_CODE_DISPATCHER_CONFIG)
-    private readonly config: AuthorizationCodeDispatcherConfig,
-    private readonly client: Oauth2ClientService,
+    @Inject(AUTHORIZATION_CODE_SERVICE_CONFIG)
+    private readonly config: AuthorizationCodeServiceConfig,
+    private readonly client: Oauth2Client,
     @Inject(AUTHORIZATION_CODE_STORAGE_FACTORY)
     storageFactory: AuthorizationCodeStorageFactory,
   ) {

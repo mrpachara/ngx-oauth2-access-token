@@ -20,45 +20,41 @@ import {
   tap,
   throwError,
 } from 'rxjs';
+
+import { RefreshTokenNotFoundError } from './errors';
 import { InvalidScopeError, validateAndTransformScopes } from './functions';
-import { Oauth2ClientService } from './oauth2-client.service';
-import { RefreshTokenNotFoundError } from './storage/access-token-local-storage-factory.service';
+import { Oauth2Client } from './oauth2.client';
+import {
+  ACCESS_TOKEN_SERVICE_CONFIG,
+  ACCESS_TOKEN_STORAGE_FACTORY,
+  EXTERNAL_SOURCE_ACCESS_TOKEN,
+} from './tokens';
 import {
   AccessToken,
-  AccessTokenDispatcherConfig,
+  AccessTokenServiceConfig,
   AccessTokenStorage,
   AccessTokenStorageFactory,
   AccessTokenWithType,
-  ACCESS_TOKEN_DISPATCHER_CONFIG,
-  ACCESS_TOKEN_STORAGE_FACTORY,
-  EXTERNAL_SOURCE_ACCESS_TOKEN,
   ScopesType,
   StandardGrantsParams,
   StoredAccessToken,
 } from './types';
 
-export function createAccessTokenDispatcherProvider(
-  providedToken:
-    | InjectionToken<AccessTokenDispatcherService>
-    | typeof AccessTokenDispatcherService,
-  config: AccessTokenDispatcherConfig,
-  clientToken: InjectionToken<Oauth2ClientService> | typeof Oauth2ClientService,
+export function createAccessTokenServiceProvider(
+  providedToken: InjectionToken<AccessTokenService> | typeof AccessTokenService,
+  config: AccessTokenServiceConfig,
+  clientToken: InjectionToken<Oauth2Client> | typeof Oauth2Client,
   externalSourceToken?: InjectionToken<Observable<AccessToken>>,
   storageFactoryToken?: InjectionToken<AccessTokenStorageFactory>,
 ): FactoryProvider {
   return {
     provide: providedToken,
     useFactory: (
-      client: Oauth2ClientService,
+      client: Oauth2Client,
       storageFactory: AccessTokenStorageFactory,
       externalSource: Observable<AccessToken> | null = null,
-    ): AccessTokenDispatcherService =>
-      new AccessTokenDispatcherService(
-        config,
-        client,
-        storageFactory,
-        externalSource,
-      ),
+    ): AccessTokenService =>
+      new AccessTokenService(config, client, storageFactory, externalSource),
     deps: [
       clientToken,
       storageFactoryToken ? storageFactoryToken : ACCESS_TOKEN_STORAGE_FACTORY,
@@ -73,7 +69,7 @@ const defaultAccessTokenTTL = 10 * 60 * 1000;
 @Injectable({
   providedIn: 'root',
 })
-export class AccessTokenDispatcherService {
+export class AccessTokenService {
   private readonly loadStoredAccessToken = () => this.storage.loadAccessToken();
 
   private readonly loadRefreshToken = () => this.storage.loadRefreshToken();
@@ -126,9 +122,9 @@ export class AccessTokenDispatcherService {
 
   private readonly storage: AccessTokenStorage;
   constructor(
-    @Inject(ACCESS_TOKEN_DISPATCHER_CONFIG)
-    private readonly config: AccessTokenDispatcherConfig,
-    private readonly client: Oauth2ClientService,
+    @Inject(ACCESS_TOKEN_SERVICE_CONFIG)
+    private readonly config: AccessTokenServiceConfig,
+    private readonly client: Oauth2Client,
     @Inject(ACCESS_TOKEN_STORAGE_FACTORY)
     storageFactory: AccessTokenStorageFactory,
     @Optional()

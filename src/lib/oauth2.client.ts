@@ -11,25 +11,22 @@ import {
 } from '@angular/core';
 import { catchError, Observable, of, throwError } from 'rxjs';
 
+import { OAUTH2_CLIENT_CONFIG, SKIP_ASSIGNING_ACCESS_TOKEN } from './tokens';
 import {
   AccessToken,
   AuthorizationCodeParams,
   Oauth2ClientConfig,
-  OAUTH2_CLIENT_CONFIG,
-  SKIP_ASSIGNING_ACCESS_TOKEN,
   StandardGrantsParams,
 } from './types';
 
-export function createOauth2ClientProvider(
-  providedToken:
-    | InjectionToken<Oauth2ClientService>
-    | typeof Oauth2ClientService,
+export function createOauth2Client(
+  providedToken: InjectionToken<Oauth2Client> | typeof Oauth2Client,
   config: Oauth2ClientConfig,
 ): FactoryProvider {
   return {
     provide: providedToken,
-    useFactory: (httpClient: HttpClient): Oauth2ClientService =>
-      new Oauth2ClientService(config, httpClient),
+    useFactory: (httpClient: HttpClient): Oauth2Client =>
+      new Oauth2Client(config, httpClient),
     deps: [HttpClient],
   };
 }
@@ -37,7 +34,7 @@ export function createOauth2ClientProvider(
 @Injectable({
   providedIn: 'root',
 })
-export class Oauth2ClientService {
+export class Oauth2Client {
   constructor(
     @Inject(OAUTH2_CLIENT_CONFIG) private readonly config: Oauth2ClientConfig,
     private readonly http: HttpClient,

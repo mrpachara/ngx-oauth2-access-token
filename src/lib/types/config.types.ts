@@ -1,5 +1,3 @@
-import { InjectionToken } from '@angular/core';
-
 export type NameableConfig = {
   name: string;
 };
@@ -16,24 +14,10 @@ export type Oauth2ClientConfig = {
   clientCredentialsInParams: boolean;
 };
 
-export type AccessTokenDispatcherConfig = NameableConfig & DebugableConfig & {};
+export type AccessTokenServiceConfig = NameableConfig & DebugableConfig & {};
 
-export type AuthorizationCodeDispatcherConfig = NameableConfig &
+export type AuthorizationCodeServiceConfig = NameableConfig &
   DebugableConfig & {
     redirectUri: string;
     pkce: boolean;
   };
-
-export const OAUTH2_CLIENT_CONFIG = new InjectionToken<Oauth2ClientConfig>(
-  'oauth2-client-config',
-);
-
-export const ACCESS_TOKEN_DISPATCHER_CONFIG =
-  new InjectionToken<AccessTokenDispatcherConfig>(
-    'access-token-dispatcher-config',
-  );
-
-export const AUTHORIZATION_CODE_DISPATCHER_CONFIG =
-  new InjectionToken<AuthorizationCodeDispatcherConfig>(
-    'authorization-code-dispatcher-config',
-  );

@@ -1,20 +1,14 @@
 import { ActivatedRoute } from '@angular/router';
 import { defer, map, Observable, of, switchMap, throwError } from 'rxjs';
-import { AuthorizationCodeDispatcherService } from '../authorization-code-dispatcher.service';
-import { StateActionDispatcherService } from '../state-action-dispatcher.service';
 
-export class BadRequestCallbackError extends Error {
-  constructor(message: string = 'Bad request to callback.') {
-    super(message);
-
-    this.name = this.constructor.name;
-  }
-}
+import { AuthorizationCodeService } from '../authorization-code.service';
+import { BadRequestCallbackError } from '../errors';
+import { StateActionService } from '../state-action.service';
 
 export function oauth2Callback(
   route: ActivatedRoute,
-  authorizationCodeDispatcher: AuthorizationCodeDispatcherService,
-  stateActionDispatcher: StateActionDispatcherService,
+  authorizationCodeService: AuthorizationCodeService,
+  stateActionService: StateActionService,
 ): Observable<any> {
   const queryParamMap = route.snapshot.queryParamMap;
 
@@ -33,7 +27,7 @@ export function oauth2Callback(
     return of(stateId);
   }).pipe(
     switchMap((stateId) => {
-      return authorizationCodeDispatcher
+      return authorizationCodeService
         .verifyState(stateId)
         .pipe(map((stateData) => [stateId, stateData] as const));
     }),
@@ -45,7 +39,7 @@ export function oauth2Callback(
         };
 
         if (queryParamMap.get('error') === 'access_denied') {
-          return authorizationCodeDispatcher
+          return authorizationCodeService
             .clearState(stateId)
             .pipe(switchMap(() => throwError(() => errorObject)));
         }
@@ -64,12 +58,12 @@ export function oauth2Callback(
         );
       }
 
-      return authorizationCodeDispatcher
+      return authorizationCodeService
         .exchangeAuthorizationCode(stateId, stateData, code)
         .pipe(map((accessToken) => [stateData, accessToken] as const));
     }),
     switchMap(([stateData, accessToken]) =>
-      stateActionDispatcher.dispatch(stateData, accessToken),
+      stateActionService.dispatch(stateData, accessToken),
     ),
   );
 }
