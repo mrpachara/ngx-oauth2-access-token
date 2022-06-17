@@ -110,7 +110,7 @@ export class AuthorizationCodeService {
     this.storage = storageFactory.create(this.config.name);
   }
 
-  authorizationCodeUrl(
+  fetchAuthorizationCodeUrl(
     scopes: ScopesType,
     stateData?: StateData,
     params?: Partial<AuthorizationCodeParams>,

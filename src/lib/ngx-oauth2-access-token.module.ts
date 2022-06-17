@@ -1,3 +1,5 @@
+import { NgModule } from '@angular/core';
+
 import { AccessTokenLocalStorageFactory } from './storage/access-token-local.storage.factory';
 import { AuthorizationCodeLocalStorageFactory } from './storage/authorization-code-local.storage.factory';
 import {
@@ -15,3 +17,9 @@ export const NGX_OAUTH2_ACCESS_TOKEN_PROVIDERS = [
     useClass: AuthorizationCodeLocalStorageFactory,
   },
 ] as const;
+
+@NgModule({
+  declarations: [],
+  providers: [...NGX_OAUTH2_ACCESS_TOKEN_PROVIDERS],
+})
+export class NgxOauth2AccessTokenModule {}

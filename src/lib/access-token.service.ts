@@ -187,7 +187,7 @@ export class AccessTokenService {
     );
   }
 
-  accessToken(): Observable<AccessTokenWithType> {
+  fetchAccessToken(): Observable<AccessTokenWithType> {
     return this.accessToken$;
   }
 
