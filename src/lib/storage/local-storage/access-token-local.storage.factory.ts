@@ -5,12 +5,12 @@ import {
   AccessTokenExpiredError,
   AccessTokenNotFoundError,
   RefreshTokenNotFoundError,
-} from '../errors';
+} from '../../errors';
 import {
   AccessTokenStorage,
   AccessTokenStorageFactory,
   StoredAccessToken,
-} from '../types';
+} from '../../types';
 import { LocalStorage } from './local.storage';
 
 const tokenDataKeyName = `oauth-token-data`;

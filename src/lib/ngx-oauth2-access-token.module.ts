@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 
-import { AccessTokenLocalStorageFactory } from './storage/access-token-local.storage.factory';
-import { AuthorizationCodeLocalStorageFactory } from './storage/authorization-code-local.storage.factory';
+import { AccessTokenLocalStorageFactory } from './storage/local-storage/access-token-local.storage.factory';
+import { AuthorizationCodeLocalStorageFactory } from './storage/local-storage/authorization-code-local.storage.factory';
 import {
   ACCESS_TOKEN_STORAGE_FACTORY,
   AUTHORIZATION_CODE_STORAGE_FACTORY,

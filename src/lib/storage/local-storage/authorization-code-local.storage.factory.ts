@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { defer, Observable, of, throwError } from 'rxjs';
 
-import { StateExpiredError, StateNotFoundError } from '../errors';
+import { StateExpiredError, StateNotFoundError } from '../../errors';
 import {
   AuthorizationCodeStorage,
   AuthorizationCodeStorageFactory,
   StateData,
-} from '../types';
+} from '../../types';
 import { LocalStorage } from './local.storage';
 
 const stateDataKeyName = `oauth-code-state`;
