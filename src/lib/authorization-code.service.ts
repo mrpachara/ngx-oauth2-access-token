@@ -113,7 +113,7 @@ export class AuthorizationCodeService {
   fetchAuthorizationCodeUrl(
     scopes: ScopesType,
     stateData?: StateData,
-    params?: Partial<AuthorizationCodeParams>,
+    additionalParams?: { [param: string]: string },
   ): Observable<URL> {
     const scope = validateAndTransformScopes(scopes);
 
@@ -127,7 +127,7 @@ export class AuthorizationCodeService {
     };
 
     const authorizationCodeParams: AuthorizationCodeParams = {
-      ...params,
+      ...additionalParams,
       response_type: 'code',
       redirect_uri: this.config.redirectUri,
       scope: scope,

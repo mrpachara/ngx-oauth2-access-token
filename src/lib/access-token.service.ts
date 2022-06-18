@@ -115,7 +115,10 @@ export class AccessTokenService {
   private readonly requestAccessToken = (
     params: StandardGrantsParams,
   ): Observable<AccessToken> => {
-    return this.client.requestAccessToken(params);
+    return this.client.requestAccessToken({
+      ...this.config.additionalParams,
+      ...params,
+    });
   };
 
   private readonly accessToken$: Observable<AccessTokenWithType>;

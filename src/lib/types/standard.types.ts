@@ -9,7 +9,7 @@ export type AccessTokenRequest = {
   client_id?: string;
   client_secret?: string;
   state?: string;
-  [additionalKey: string]: string | undefined;
+  [param: string]: string | undefined;
 };
 
 export type PasswordGrantAccessTokenRequest = AccessTokenRequest & {
@@ -52,7 +52,7 @@ export type AuthorizationCodeRequest = {
   code_challenge_method?: 'S256' | 'plain';
   redirect_uri: string;
   state: string;
-  [additionalKey: string]: string | undefined;
+  [param: string]: string | undefined;
 };
 
 export type AccessToken = {

@@ -14,7 +14,10 @@ export type Oauth2ClientConfig = {
   clientCredentialsInParams: boolean;
 };
 
-export type AccessTokenServiceConfig = NameableConfig & DebugableConfig & {};
+export type AccessTokenServiceConfig = NameableConfig &
+  DebugableConfig & {
+    additionalParams: { [param: string]: string } | null;
+  };
 
 export type AuthorizationCodeServiceConfig = NameableConfig &
   DebugableConfig & {

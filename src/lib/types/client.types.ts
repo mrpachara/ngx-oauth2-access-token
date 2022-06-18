@@ -1,5 +1,3 @@
-import { HttpContextToken } from '@angular/common/http';
-
 export type GrantParams = {
   grant_type: string;
   state?: string;
@@ -22,6 +20,7 @@ export type AuthorizationCodeGrantParams = GrantParams & {
   code: string;
   code_verifier?: string;
   redirect_uri: string;
+  [param: string]: string | undefined;
 };
 
 export type RefreshTokenGrantParams = GrantParams & {
@@ -43,4 +42,5 @@ export type AuthorizationCodeParams = {
   code_challenge_method?: 'S256' | 'plain';
   redirect_uri: string;
   state?: string;
+  [param: string]: string | undefined;
 };
