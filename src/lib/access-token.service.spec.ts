@@ -5,9 +5,14 @@ import {
 import { TestBed } from '@angular/core/testing';
 
 import { AccessTokenService } from './access-token.service';
-import { NGX_OAUTH2_ACCESS_TOKEN_PROVIDERS } from './providers';
+import { NGX_OAUTH2_ACCESS_TOKEN_PROVIDERS } from './ngx-oauth2-access-token.module';
 import { ACCESS_TOKEN_SERVICE_CONFIG, OAUTH2_CLIENT_CONFIG } from './tokens';
-import { AccessTokenServiceConfig, Oauth2ClientConfig } from './types';
+import {
+  AccessToken,
+  AccessTokenServiceConfig,
+  Oauth2ClientConfig,
+  PasswordGrantParams,
+} from './types';
 
 const oauth2ClientConfig: Oauth2ClientConfig = {
   clientId: 'web-app',
@@ -17,8 +22,9 @@ const oauth2ClientConfig: Oauth2ClientConfig = {
   clientCredentialsInParams: false,
 };
 
-const accessTokenConfig: AccessTokenServiceConfig = {
+const accessTokenServiceConfig: AccessTokenServiceConfig = {
   name: 'oauth2',
+  additionalParams: null,
   debug: false,
 };
 
@@ -34,7 +40,7 @@ describe('AccessTokenService', () => {
         { provide: OAUTH2_CLIENT_CONFIG, useValue: oauth2ClientConfig },
         {
           provide: ACCESS_TOKEN_SERVICE_CONFIG,
-          useValue: accessTokenConfig,
+          useValue: accessTokenServiceConfig,
         },
       ],
     });
@@ -42,6 +48,17 @@ describe('AccessTokenService', () => {
   });
 
   it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+
+  it('can respond access token for password grant', () => {
+    const expectedData: AccessToken = {
+      token_type: 'Bearer',
+      access_token: 'acess-token',
+      expires_in: 30 * 60,
+      refresh_token: 'refresh-token',
+    };
+
     expect(service).toBeTruthy();
   });
 });
