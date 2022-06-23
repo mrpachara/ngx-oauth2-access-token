@@ -1,16 +1,15 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import {
   HttpClientTestingModule,
   HttpTestingController,
   TestRequest,
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { AccessToken } from 'ngx-oauth2-access-token';
 import { isOauthError } from './functions';
 
 import { Oauth2Client } from './oauth2.client';
 import { OAUTH2_CLIENT_CONFIG } from './tokens';
 import {
+  AccessToken,
   Oauth2ClientConfig,
   PasswordGrantParams,
   StandardGrantTypes,
